@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Projet MATHIS</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f6;--fg:#14202e;--mut:#5a6878;--card:#fff;--bd:#d3dbe4;--ac:#0b7a9e;--ok:#18865a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1620;--fg:#e4ebf2;--mut:#90a0b2;--card:#162230;--bd:#2a3a4c;--ac:#4cc3e6;--ok:#4fcf92;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1620;--fg:#e4ebf2;--mut:#90a0b2;--card:#162230;--bd:#2a3a4c;--ac:#4cc3e6;--ok:#4fcf92;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.7rem;line-height:1.2;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 16px}
+.glob{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:20px}
+.bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .25s}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+button{font:inherit;color:var(--mut);background:none;border:1px solid var(--bd);border-radius:6px;padding:4px 10px;cursor:pointer}
+button:hover{color:var(--fg)}
+details{background:var(--card);border:1px solid var(--bd);border-radius:10px;margin-bottom:14px}
+summary{cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+.cnt{color:var(--mut);font-weight:400;white-space:nowrap}
+.cnt.done{color:var(--ok);font-weight:600}
+.goal{margin:0;padding:0 16px 8px;color:var(--mut)}
+.task{border-top:1px solid var(--bd);padding:12px 16px}
+.th{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+ul{list-style:none;margin:8px 0 0 28px;padding:0}
+li{margin:4px 0}
+li label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;color:var(--fg)}
+input[type=checkbox]{width:18px;height:18px;margin:3px 0 0;flex:none;accent-color:var(--ac)}
+input:checked+span{color:var(--mut);text-decoration:line-through}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>Projet MATHIS</h1>
+<p class="sub">Coche chaque sous-tâche terminée. Ta progression est enregistrée dans ce navigateur.</p>
+<div class="glob"><div class="row"><b id="gt">0 %</b><button id="rs" type="button">Tout décocher</button></div><div class="bar"><i id="gb"></i></div></div>
+<div id="app"></div>
+</main>
+<script>
+const Y=x=>({x,d:1});
+const D=[
+{t:"Objectif 1 : préparer l’environnement",g:"Avoir tout ce qu’il faut pour coder, appeler l’IA et valider les accès risqués.",k:[
+{t:"Installer les outils",s:["Installer Python 3.11 ou plus récent","Installer VS Code et Git","Créer le dossier du projet et un dépôt Git","Créer un environnement virtuel (venv)"]},
+{t:"Accéder à l’API du modèle d’IA",s:["Créer un compte chez le fournisseur choisi (Claude ou Gemini) et générer une clé API","Stocker la clé dans un fichier .env (jamais dans le code ni sur Git)","Installer le SDK du fournisseur (anthropic ou google-genai)","Écrire un script qui envoie un message au modèle et affiche la réponse","Isoler cet appel dans un seul module pour pouvoir changer de modèle"]},
+{t:"Valider tôt les accès sensibles",s:["Tester l’autorisation du compte universitaire Microsoft (epfedu.fr)","Générer un mot de passe d’application iCloud (mails et calendrier)","Tester sur l’iPhone une automatisation Raccourcis déclenchée par un message","Tester la synchronisation iCloud d’un dossier Obsidian entre PC et iPhone"]},
+{t:"Vérification de l’objectif 1",s:["Envoyer un message de test au modèle : Une réponse s’affiche","Chercher la clé API dans le dépôt Git : Aucune trace de la clé","Changer de fournisseur d’IA : Un seul module à modifier","Tester les accès iCloud, Microsoft et Raccourcis : Réussis, ou repli noté dans les questions ouvertes"]}]},
+{t:"Objectif 2 : prototype Windows (phase 1)",g:"Réussir « Mathis, ouvre VS Code » depuis une fenêtre de chat.",k:[
+{t:"Chat en console avec le modèle",s:["Boucle saisie, appel API, affichage","Garder l’historique de la conversation","Rédiger le prompt système (serviteur de confiance, « Monsieur », ton nuancé, réponses de 10 à 20 secondes)","Gérer les erreurs (réseau, clé invalide, limite atteinte)","Tester le mode réflexion : réfuter franchement une mauvaise idée"]},
+{t:"Premier outil : ouvrir une application",s:["Définir l’outil ouvrir_application (schéma JSON)","Coder l’ouverture avec os.startfile ou subprocess","Gérer la boucle tool_use puis tool_result","Créer une liste blanche d’applications autorisées"]},
+{t:"Gestionnaire d’actions et sécurité",s:["Classer les actions : libres ou sensibles","Demander une confirmation explicite avant toute action sensible","Écrire chaque action exécutée dans un journal (log)","Tester les refus : suppression, envoi de mail, achat","Suppression = corbeille, jamais effacement définitif"]},
+{t:"Interface graphique simple",s:["Choisir la bibliothèque (Tkinter ou CustomTkinter)","Zone de chat et champ de saisie","Panneau de suivi des actions exécutées","Fenêtre de paramètres (clé API, voix, applications)","Affichage des documents longs quand la réponse dépasse 20 secondes"]},
+{t:"Voix sur PC",s:["Reconnaissance vocale en local (faster-whisper)","Synthèse vocale (Piper ou edge-tts)","Bouton « appuyer pour parler »","Mesurer la latence totale (objectif : 3 secondes au plus)","Mot d’activation « Mathis » (openWakeWord ou Porcupine)","Voix masculine posée ; français, anglais pour les mots anglais, japonais prononcé sur demande","Son discret de mise en veille après 5 à 7 secondes de silence"]},
+{t:"Reconnaissance de la voix de l’utilisateur",s:["Enregistrer une dizaine de phrases de référence","Calculer l’empreinte vocale (SpeechBrain ou Resemblyzer)","Trois états : reconnu, non reconnu, autorisé par critères","« Monsieur » seulement si la voix est reconnue"]},
+{t:"Dictée avec commandes d’édition",s:["Garder un brouillon en mémoire","« Supprime la dernière phrase » et « supprime le dernier mot »","Relire le texte à la demande","Envoyer seulement après l’ordre explicite"]},
+{t:"Vérification de l’objectif 2",s:["Dire « Mathis, ouvre VS Code » : L’application s’ouvre ; une application hors liste blanche est refusée","Demander une suppression ou un envoi : Relecture de l’action puis confirmation vocale exigée","Parler avec une voix non reconnue : MATHIS le dit et refuse par défaut","Parler avec la voix reconnue : « Monsieur » dit une seule fois","Poser une question simple : Réponse parlée de 10 à 20 secondes, sinon affichage","Mesurer le délai entre la fin de la phrase et la réponse : 3 secondes au plus","Parler de façon peu claire : Deux interprétations proposées ou demande de répéter","Dicter un texte puis « supprime la dernière phrase » et « supprime le dernier mot » : Le brouillon est corrigé"]}]},
+{t:"Objectif 3 : mémoire et aide aux études (phase 2)",g:"Un assistant qui connaît l’utilisateur et l’aide à réviser et à réfléchir.",k:[
+{t:"Lire et traiter les documents",s:["Lecture de PDF, DOCX, TXT et Markdown","Outil de recherche de fichier sur le PC","Résumé et extraction d’informations","Gérer les documents longs (découpage en parties)"]},
+{t:"Fonctions d’étude et de langue",s:["Explication d’un point de cours, puis reformulation plus simple","Génération de fiches de révision","Génération de quiz et correction","Création de cartes mémoire","Traductions anglais et japonais, avec lecture (kana ou romaji) et prononciation sur demande","Planification : « que dois-je travailler aujourd’hui ? » d’après les mails de l’école (qui font foi) et le calendrier","Auto-évaluation orale après chaque quiz, résultats suivis par chapitre"]},
+{t:"Mémoire utilisateur",s:["Fichier de mémoire (JSON ou Markdown)","Injecter la mémoire dans le prompt système","Commandes « retiens ça » et « oublie ça »","Vérifier qu’aucune donnée sensible n’est stockée sans accord"]},
+{t:"Obsidian et notes",s:["Créer le vault Obsidian sur le PC et le synchroniser via iCloud","Lire et écrire des notes depuis l’assistant","Gestion des tâches (ajout, liste, terminé)","Suivi de la qualité du travail par matière (quiz et auto-évaluation)"]},
+{t:"Journal des conversations",s:["Résumé des conclusions et décisions, écrit à 10 h et à 22 h","Option « ne pas enregistrer » à préciser avant","Dossier Privé chiffré, mot de passe saisi à l’écran","Déplacer une conversation en Privé après coup","Une note par sujet avec sous-notes datées ; MATHIS crée seul les sujets"]},
+{t:"Vérification de l’objectif 3",s:["Générer une fiche à partir d’un PDF et d’une photo de cours : Fiche rangée dans Obsidian, par matière et chapitre","Faire un quiz puis le terminer : Corrections orales, puis auto-évaluation demandée","Demander « que dois-je travailler aujourd’hui ? » : Réponse fondée sur les dates des mails et du calendrier, chapitres faibles en premier","Marquer une conversation « ne pas enregistrer » : Aucune trace dans le journal ni dans Obsidian","Déplacer une conversation en Privé : Note chiffrée, mot de passe saisi à l’écran","Attendre 10 h ou 22 h : Résumé rangé dans la bonne note de sujet, daté"]}]},
+{t:"Objectif 4 : agent personnel (phase 3)",g:"Connecter l’assistant aux services, avec validation avant d’agir.",k:[
+{t:"Découvrir MCP",s:["Comprendre le principe d’un serveur MCP","Connecter un premier serveur MCP simple","Tester un appel d’outil de bout en bout"]},
+{t:"Mails et agenda",s:["Connecter le compte iCloud (IMAP) et le compte Microsoft (Graph)","Actions à la voix : drapeau, déplacer, archiver, corbeille","Calendrier Apple (CalDAV) : emploi du temps perso par défaut, calendrier universitaire sur demande","Répondre par dictée ou par proposition, puis envoyer sur ordre"]},
+{t:"Automatisations avec n8n",s:["Installer et lancer n8n","Workflow : mail reçu, résumé, tâche créée","Ajouter l’événement à l’agenda et la notification","Relier n8n à l’assistant via webhook"]},
+{t:"Messages du téléphone",s:["Messages : automatisation Raccourcis qui transmet les propositions de rendez-vous","WhatsApp : tester le déclencheur de notifications d’iOS 27","Filtrer sur quelques mots (rdv, demain, heure) avant envoi à l’IA","Proposer d’ajouter le rendez-vous détecté, sur accord"]},
+{t:"Vérification de l’objectif 4",s:["Dicter « ajoute un rendez-vous jeudi à 14 h » : Événement dans l’emploi du temps perso, prochain jeudi, conflit signalé","Demander un ajout au calendrier universitaire : Fait seulement quand la demande le précise","Drapeau, déplacer, archiver, corbeille sur un mail : Actions réussies sur iCloud et Microsoft","Répondre par dictée puis par proposition : Rien n’est envoyé avant « envoie »","Recevoir un message de rendez-vous : MATHIS propose l’ajout","Mail et calendrier en contradiction sur une date : Le mail fait foi"]}]},
+{t:"Objectif 5 : boîtier physique (phase 4)",g:"Un boîtier autonome qui écoute, parle et appelle directement les services en Wi-Fi, même PC éteint.",k:[
+{t:"Matériel et système",s:["Choisir la carte : le boîtier tourne seul, un Pi 5 est un bon candidat (mémoire et vitesse à tester)","Installer l’OS ; le programme du boîtier a d’abord été testé sur PC","Brancher et tester le micro et le haut-parleur","Configurer le réseau et l’accès SSH"]},
+{t:"Mot-clé et capture audio",s:["Détection du mot « Mathis » (openWakeWord ou Porcupine)","Enregistrer la phrase jusqu’au silence","Régler la sensibilité (faux déclenchements)"]},
+{t:"Autonomie, Wi-Fi et affichage",s:["Le boîtier appelle directement le modèle d’IA, le calendrier et les mails par Wi-Fi","Le boîtier fonctionne PC éteint (même programme que sur PC)","Affichage des documents sur le téléphone par notification","Protéger les clés (limitées, révocables, stockage protégé)","Notes gardées dans un fichier sur le boîtier, copiées dans Obsidian quand le PC est allumé"]},
+{t:"Fiabilité",s:["Démarrage automatique (service systemd)","Hors réseau : « Monsieur, je suis hors réseau, je ne peux vous répondre », réponses locales simples, file d’attente","Boîtier : assemblage et ventilation","Actions sensibles en attente : confirmation au retour d’internet","Heure fiable (fuseau de Paris) pour les mises à jour de 10 h et 22 h"]},
+{t:"Vérification de l’objectif 5",s:["Éteindre le PC et parler au boîtier : Le boîtier répond","Couper internet : « Monsieur, je suis hors réseau, je ne peux vous répondre » ; heure et minuteur en local","Rétablir internet : Actions sans risque rattrapées, actions sensibles en attente de confirmation","Demander un document long : Affichage sur le téléphone","Se taire 5 à 7 secondes : Son de mise en veille","Rallumer le PC après des notes prises : Notes copiées dans Obsidian"]}]},
+{t:"Objectif 6 : écosystème complet (phase 5)",g:"Enchaîner des actions complexes et consolider.",k:[
+{t:"Workflows complexes (niveau 4)",s:["Planification de plusieurs actions par le modèle","Enchaîner plusieurs outils dans l’ordre","Exemple cible : mails du jour, tâches, créneaux de la semaine","Contrôle humain à chaque étape sensible"]},
+{t:"Extensions",s:["Maison connectée (Home Assistant) en option","Voix personnalisée","Tableau de bord de suivi des actions"]},
+{t:"Qualité et documentation",s:["Tests des scénarios principaux et des cas d’erreur","Relecture de la sécurité et des permissions","Rédiger le README et le schéma d’architecture"]},
+{t:"Applications",s:["Ouvrir et fermer des applications à la voix","Musique : valider Apple Music (navigateur ou iPhone), sinon un autre service","Ajouter une information au calendrier ou à Obsidian","Traduire une phrase dite ou un document affiché"]},
+{t:"Vérification de l’objectif 6",s:["Lancer un enchaînement de plusieurs actions : Exécuté, confirmation aux étapes sensibles","Demander de la musique : Lecture sur l’iPhone, ou repli validé","« Comment on dit … en japonais » : Réponse prononcée en japonais, lecture affichée","Traduire une phrase dite et un document affiché : Traductions correctes"]}]},
+{t:"Objectif 7 : cadrage et conception (fait)",g:"Le dossier d’exigences est établi ; il vit dans le vault Obsidian du projet.",k:[
+{t:"Dossier d’exigences et cas d’utilisation",s:[Y("Cas d’utilisation 1 : définitions, traductions, réflexion critique"),Y("Cas d’utilisation 2 : calendrier et mails à la voix"),Y("Cas d’utilisation 3 : musique, notes, traduction"),Y("Exigences voix, personnalité, sécurité, confidentialité")]},
+{t:"Décisions prises",s:[Y("Notes dans Obsidian, synchronisées via iCloud"),Y("Reconnaissance vocale en local"),Y("Modèle d’IA remplaçable"),Y("Budget matériel 300 à 400 €, environ 6 h par semaine"),Y("Boîtier autonome en Wi-Fi, affichage sur le téléphone"),Y("Confirmations vocales, voix reconnue obligatoire"),Y("Résumés Obsidian à 10 h et 22 h, une note par sujet"),Y("Études : fiches, quiz, planification, qualité du travail")]},
+{t:"Restant à décider ou vérifier",s:["Choix Claude ou Gemini après un test comparatif","Accès au compte universitaire Microsoft","Faisabilité de la musique sur iPhone","Mémoire et vitesse du boîtier pour la voix en local"]}]},
+{t:"Objectif 8 : check final (toute fin de projet)",g:"Revérifier l’ensemble du projet avant de le déclarer terminé.",k:[
+{t:"Voix et personnalité",s:["Écouter MATHIS en français, en anglais et en japonais : Voix masculine posée, langue correcte","Tester les trois états de reconnaissance : Reconnu, non reconnu, autorisé par critères","Proposer une mauvaise idée : MATHIS la réfute avec des arguments"]},
+{t:"Sécurité et confidentialité",s:["Essayer chaque action sensible : Confirmation vocale toujours exigée","Contrôler les clés d’accès : Limitées, révocables, stockées de façon protégée","Ouvrir le dossier Privé : Mot de passe saisi à l’écran"]},
+{t:"Fonctionnement et performance",s:["Mesurer le délai de réponse : 3 secondes au plus","Tester PC éteint et hors réseau : Comportements prévus","Contrôler les mises à jour de 10 h et 22 h : Notes datées, classées par sujet"]},
+{t:"Cas d’utilisation",s:["Rejouer le cas d’utilisation 1 (définitions, traductions, réflexion) : Tout réussit","Rejouer le cas d’utilisation 2 (calendrier et mails) : Tout réussit","Rejouer le cas d’utilisation 3 (musique, notes, traduction) : Tout réussit","Rejouer le cas d’utilisation 4 (fiches, quiz, planification) : Tout réussit"]},
+{t:"Clôture",s:["Relire le budget et le temps passé : Notés dans le vault","Rédiger le README et le schéma d’architecture : À jour","Mettre à jour le vault Obsidian : À jour"]}]}
+];
+let S={};try{S=JSON.parse(localStorage.getItem("jv-route")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("jv-route",JSON.stringify(S))}catch(e){}};
+const app=document.getElementById("app");
+D.forEach((p,i)=>{
+  const d=document.createElement("details");d.open=i<2||i==6;
+  d.innerHTML=`<summary><span>${p.t}</span><span class="cnt" id="c${i}"></span></summary><p class="goal">${p.g}</p>`;
+  p.k.forEach((k,j)=>{
+    const t=document.createElement("div");t.className="task";
+    t.innerHTML=`<label class="th"><input type="checkbox" data-task="${i}-${j}"><b>${k.t}</b></label><ul>`+
+      k.s.map((s,m)=>`<li><label><input type="checkbox" data-id="${i}-${j}-${m}"><span>${s.x||s}</span></label></li>`).join("")+`</ul>`;
+    d.appendChild(t);
+  });
+  app.appendChild(d);
+});
+function update(){
+  let tot=0,ok=0;
+  D.forEach((p,i)=>{
+    let pt=0,po=0;
+    p.k.forEach((k,j)=>{
+      let n=0;
+      k.s.forEach((s,m)=>{const id=`${i}-${j}-${m}`;const c=(id in S)?!!S[id]:!!s.d;
+        document.querySelector(`[data-id="${id}"]`).checked=c;n+=c;});
+      const h=document.querySelector(`[data-task="${i}-${j}"]`);
+      h.checked=n===k.s.length;h.indeterminate=n>0&&n<k.s.length;
+      pt+=k.s.length;po+=n;
+    });
+    const c=document.getElementById("c"+i);
+    c.textContent=`${po}/${pt}`;c.className="cnt"+(po===pt?" done":"");
+    tot+=pt;ok+=po;
+  });
+  const pc=Math.round(100*ok/tot);
+  document.getElementById("gt").textContent=`${pc} % terminé (${ok}/${tot})`;
+  document.getElementById("gb").style.width=pc+"%";
+}
+app.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.id){S[el.dataset.id]=el.checked;}
+  else if(el.dataset.task){
+    const [i,j]=el.dataset.task.split("-");
+    D[i].k[j].s.forEach((_,m)=>{S[`${i}-${j}-${m}`]=el.checked;});
+  }
+  save();update();
+});
+document.getElementById("rs").addEventListener("click",()=>{
+  if(confirm("Tout décocher ?")){S={};D.forEach((p,i)=>p.k.forEach((k,j)=>k.s.forEach((_,m)=>{S[`${i}-${j}-${m}`]=false})));save();update();}
+});
+update();
+</script>
+</body>
+</html>
