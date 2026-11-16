@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Projet MATHIS</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cmask id='m'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ccircle cx='50' cy='50' r='22' fill='black'/%3E%3C/mask%3E%3C/defs%3E%3Cg fill='%23ffffff' mask='url(%23m)'%3E%3Ccircle cx='50' cy='50' r='37'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(30 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(60 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(90 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(120 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(150 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(180 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(210 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(240 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(270 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(300 50 50)'/%3E%3Cpath d='M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z' transform='rotate(330 50 50)'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' fill-rule='evenodd' d='M43.5,8 L56.5,8 L58,18 C61,19 64,20.5 66.5,22 L75.5,17 L83,24.5 L78,33.5 C79.5,36 81,39 82,42 L92,43.5 L92,56.5 L82,58 C81,61 79.5,64 78,66.5 L83,75.5 L75.5,83 L66.5,78 C64,79.5 61,81 58,82 L56.5,92 L43.5,92 L42,82 C39,81 36,79.5 33.5,78 L24.5,83 L17,75.5 L22,66.5 C20.5,64 19,61 18,58 L8,56.5 L8,43.5 L18,42 C19,39 20.5,36 22,33.5 L17,24.5 L24.5,17 L33.5,22 C36,20.5 39,19 42,18 Z M50,31 A19,19 0 1,0 50,69 A19,19 0 1,0 50,31 Z'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef2f6;--fg:#14202e;--mut:#5a6878;--card:#fff;--bd:#d3dbe4;--ac:#0b7a9e;--ok:#18865a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -44,27 +44,7 @@ input:checked+span{color:var(--mut);text-decoration:line-through}
 <main>
 <div class="title-row">
   <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
-    <defs>
-      <mask id="gear-hole">
-        <rect width="100" height="100" fill="white"/>
-        <circle cx="50" cy="50" r="22" fill="black"/>
-      </mask>
-    </defs>
-    <g fill="currentColor" mask="url(#gear-hole)">
-      <circle cx="50" cy="50" r="37"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(30 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(60 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(90 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(120 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(150 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(180 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(210 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(240 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(270 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(300 50 50)"/>
-      <path d="M42,5 A46,46 0 0,1 58,5 L56,15 L44,15 Z" transform="rotate(330 50 50)"/>
-    </g>
+    <path fill="currentColor" fill-rule="evenodd" d="M43.5,8 L56.5,8 L58,18 C61,19 64,20.5 66.5,22 L75.5,17 L83,24.5 L78,33.5 C79.5,36 81,39 82,42 L92,43.5 L92,56.5 L82,58 C81,61 79.5,64 78,66.5 L83,75.5 L75.5,83 L66.5,78 C64,79.5 61,81 58,82 L56.5,92 L43.5,92 L42,82 C39,81 36,79.5 33.5,78 L24.5,83 L17,75.5 L22,66.5 C20.5,64 19,61 18,58 L8,56.5 L8,43.5 L18,42 C19,39 20.5,36 22,33.5 L17,24.5 L24.5,17 L33.5,22 C36,20.5 39,19 42,18 Z M50,31 A19,19 0 1,0 50,69 A19,19 0 1,0 50,31 Z"/>
   </svg>
   <h1>Projet MATHIS</h1>
 </div>
